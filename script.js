@@ -35,7 +35,7 @@ window.addEventListener('DOMContentLoaded', () => {
     // Timer
 
     function timer(id, deadline) {
-      
+
         function getTimeRemaining(endtime) {
             const t = Date.parse(endtime) - Date.parse(new Date()),
                 days = Math.floor((t / (1000 * 60 * 60 * 24))),
@@ -114,6 +114,10 @@ window.addEventListener('DOMContentLoaded', () => {
         slide.style.width = width;
     })
 
+    function translateSlides() {
+        slidesField.style.transform = `translateX(-${offset}px)`;
+    }
+
     // Arrows listener
     next.addEventListener('click', () => {
         if (offset == +width.slice(0, width.length - 2) * (slides.length - 1)) {
@@ -121,9 +125,11 @@ window.addEventListener('DOMContentLoaded', () => {
         } else {
             offset += +width.slice(0, width.length - 2)
         }
-        slidesField.style.transform = `translateX(-${offset}px)`;
-        dots.forEach(dot => dot.style.opacity = ".5");
-        dots[slideIndex-1].style.backgroundColor = '#2192BF';
+        translateSlides();
+
+
+
+        dots[slideIndex - 1].style.backgroundColor = '#2192BF';
     });
     prev.addEventListener('click', () => {
         if (offset == 0) {
@@ -132,14 +138,14 @@ window.addEventListener('DOMContentLoaded', () => {
             offset -= +width.slice(0, width.length - 2);
         }
 
-        slidesField.style.transform = `translateX(-${offset}px)`;
-        dots.forEach(dot => dot.style.opacity = ".5");
-        dots[slideIndex-1].style.backgroundColor = '#2192BF';
+        translateSlides();
+
+        dots[slideIndex - 1].style.backgroundColor = '#2192BF';
     });
     const dots = [];
 
     for (let i = 0; i < slides.length; i++) {
-        const dot = document.createElement('li');
+        var dot = document.createElement('li');
         dot.textContent = '.';
         dot.setAttribute('data-slide-to', i + 1);
         if (i == 0) {
@@ -149,6 +155,95 @@ window.addEventListener('DOMContentLoaded', () => {
         dots.push(dot);
     }
 
+
+    let touchstartX = 0;
+    let touchstartY = 0;
+    let touchendX = 0;
+    let touchendY = 0;
+
+    const swipeZone = document.querySelector('[data-slider]');
+
+    swipeZone.addEventListener('touchstart', function (e) {
+        touchstartX = e.changedTouches[0].screenX;
+        touchstartY = e.changedTouches[0].screenY;
+    }, false);
+
+    swipeZone.addEventListener('touchend', function (e) {
+        touchendX = e.changedTouches[0].screenX;
+        touchendY = e.changedTouches[0].screenY;
+        handleGesure();
+        // for (let i = 0; i < slides.length; i++){
+        //     e.target.setAttribute('data-swipe-to', i);
+        // }
+        // console.log(e.target)
+
+    }, false);
+
+    
+    
+    
+    function swipeLeft() {
+       
+        if (touchendX < touchstartX) {
+            if (offset == +width.slice(0, width.length - 2) * (slides.length - 1)) {
+                offset = 0;
+            } else {
+                offset += +width.slice(0, width.length - 2)
+            }
+            if (slideIndex == slides.length) {
+                slideIndex = 1;
+                dots[slides.length-1].style.backgroundColor = "#c4c4c4";
+                
+            } else {
+                slideIndex++;
+            }
+            dots[slideIndex-1].style.backgroundColor = '#2192BF';
+            dots[Math.abs(slideIndex-2)].style.backgroundColor = "#c4c4c4";
+            // dots.forEach(dot => dot.style.backgroundColor = "#c4c4c4");
+           
+            
+                        
+            translateSlides();
+            
+        }
+    }
+
+    function swipeRight() {
+        
+        if (touchendX > touchstartX) {
+            if (offset == 0) {
+                offset = +width.slice(0, width.length - 2) * (slides.length - 1);
+            } else {
+                offset -= +width.slice(0, width.length - 2);
+            }
+            if (slideIndex == 1) {
+                dots[slideIndex-1].style.backgroundColor = '#c4c4c4';
+                slideIndex = slides.length;
+                
+            }else {
+                slideIndex--;
+                dots[slides.length-1].style.backgroundColor = "#c4c4c4";
+                
+            }      
+             
+            dots[slideIndex-1].style.backgroundColor = '#2192BF';
+            dots[Math.abs(slideIndex-2)].style.backgroundColor = "#c4c4c4";
+            // dots.forEach(dot => dot.style.backgroundColor = "#c4c4c4");
+            
+           
+            
+            
+            translateSlides();
+        }
+    }
+
+    function handleGesure() {
+        swipeLeft();
+        swipeRight();
+        
+        // dots[index].style.backgroundColor = '#2192BF';
+        // dots.forEach(dot => dot.style.backgroundColor = "#c4c4c4");
+    }
     // Dot's listener
     dots.forEach(dot => {
         dot.addEventListener('click', (e) => {
@@ -157,17 +252,19 @@ window.addEventListener('DOMContentLoaded', () => {
             slideIndex = slideTo;
             offset = deleteNotDigits(width) * (slideTo - 1);
 
-            slidesField.style.transform = `translateX(-${offset}px)`;
+            translateSlides();
 
-            
+
 
             dots.forEach(dot => dot.style.backgroundColor = '#c4c4c4');
-            dots[slideIndex-1].style.backgroundColor = '#2192BF';
+            dots[slideIndex - 1].style.backgroundColor = '#2192BF';
         });
     });
+
     function deleteNotDigits(str) {
         return +str.replace(/\D/g, '');
     }
+
 
     // Mask 
 
@@ -229,4 +326,11 @@ window.addEventListener('DOMContentLoaded', () => {
             event.preventDefault();
         });
     });
+
+
+
+
+
+
+
 });

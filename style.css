@@ -154,6 +154,7 @@ li {
 
 .menu_home {
     display: none;
+    margin-bottom: 20px;
 }
 
 .menu_list {
@@ -277,6 +278,9 @@ li {
     line-height: 28px;
 }
 
+.description{
+    margin-top: 50px;
+}
 .descr_title {
     font-family: Cuprum;
     font-style: normal;
@@ -544,6 +548,12 @@ input {
         font-size: 14px;
         line-height: 16px;
     }
+    .certificates{
+        display: none;
+    }
+    .courses{
+        display: none;
+    }
 
     .menu_list-item+.menu_list-item {
         margin-left: 25px;
@@ -628,10 +638,19 @@ input {
         overflow: hidden;
         background: linear-gradient(180deg, #2192BF 0%, rgba(26, 210, 214, 0.87) 100%);
         text-align: center;
-        padding-top: 110px;
+        padding-top: 160px;
+        padding-left: 0;
 
     }
-
+    .active{
+        border: none;
+    }
+    .certificates{
+        display: block;
+    }
+    .courses{
+       display: block;
+    }
     .menu-mobile--open li {
         display: block;
         font-family: Montserrat;
@@ -640,11 +659,19 @@ input {
         font-size: 20px;
         line-height: 86%;
         color: #fff;
+        padding: 0;
+        
+        
+    }
+    .menu-mobile--open li + li{
+        margin-bottom: 25px;
+        margin-top: 0;
+    }
+    .menu_list-item + .menu_list-item{
+        margin-left: 0;
     }
 
-    .menu-mobile--open li+li {
-        margin-top: 25px;
-    }
+    
 
     .menu {
         position: relative;
